@@ -13,5 +13,9 @@ public interface NodeMapper {
 
     List<Map<String, String>> CategoryGet();
 
+    List<Map<String, String>> CategoryCnt();
+
     List<Map<String, String>> SensorGet();
+
+    List<Map<String, String>> TotalData();
 }

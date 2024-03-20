@@ -13,7 +13,17 @@
     </select>
 
     <select id="CategoryGet">
-        select node.id, product.category from node join product on node.product_id = product.id
+        select node.id, node.setup_location, node.product_id, product.category from node
+        join product on node.product_id = product.id
+        where node.company_id = "7"
+    </select>
+
+    <select id="CategoryCnt">
+        SELECT product.category, COUNT(*) AS count
+        FROM node
+        JOIN product ON node.product_id = product.id
+        WHERE node.company_id = "7"
+        GROUP BY product.category
     </select>
 
     <select id="SensorGet">
@@ -23,6 +33,30 @@
         and slot.sensor_code = slot_default.sensor_code and slot.slot_number = slot_default.slot_number
         join code on slot_default.sensor_code = code.id
         order by node.id asc, slot.slot_number asc
+    </select>
+
+    <select id="TotalData">
+        SELECT
+            node.id AS node_id,
+            node.setup_location,
+            product.category,
+            code.id AS code_id,
+            code.short_name,
+            slot.slot_number
+        FROM
+            node
+        JOIN
+            product ON node.product_id = product.id
+        JOIN
+            slot ON node.id = slot.node_id
+        JOIN
+            slot_default ON node.product_id = slot_default.product_id
+            AND slot.sensor_code = slot_default.sensor_code
+            AND slot.slot_number = slot_default.slot_number
+        JOIN
+            code ON slot_default.sensor_code = code.id
+        ORDER BY
+            node.id ASC, slot.slot_number ASC;
     </select>
 
 </mapper>

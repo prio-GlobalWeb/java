@@ -240,8 +240,51 @@ public class NodeController {
     @GetMapping(value = "category", produces = "application/json; charset=UTF-8")
     public List<Map<String, String>> categoryGet() {
         List<Map<String, String>> category = mapper.CategoryGet();
+        List<Map<String, String>> resultList = new ArrayList<>();
 
-        return category;
+        // 각 Map에 대해 숫자 값을 문자열로 변환하여 새로운 Map을 만들어 결과 리스트에 추가합니다.
+        for (Map<String, String> categoryMap : category) {
+            Map<String, String> resultMap = new HashMap<>();
+            for (Map.Entry<String, String> entry : categoryMap.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue(); // 값의 형식을 Object로 변경
+
+                // 만약 값이 숫자라면 문자열로 변환하여 넣어줍니다.
+                if (isNumeric(value)) {
+                    resultMap.put(key, String.valueOf(value));
+                } else {
+                    resultMap.put(key, (String) value);
+                }
+            }
+            resultList.add(resultMap);
+        }
+
+        return resultList;
+    }
+
+    @GetMapping(value = "categorycnt", produces = "application/json; charset=UTF-8")
+    public List<Map<String, String>> categoryCnt() {
+        List<Map<String, String>> count = mapper.CategoryCnt();
+        List<Map<String, String>> resultList = new ArrayList<>();
+
+        // 각 Map에 대해 숫자 값을 문자열로 변환하여 새로운 Map을 만들어 결과 리스트에 추가합니다.
+        for (Map<String, String> categorycountMap : count) {
+            Map<String, String> resultMap = new HashMap<>();
+            for (Map.Entry<String, String> entry : categorycountMap.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue(); // 값의 형식을 Object로 변경
+
+                // 만약 값이 숫자라면 문자열로 변환하여 넣어줍니다.
+                if (isNumeric(value)) {
+                    resultMap.put(key, String.valueOf(value));
+                } else {
+                    resultMap.put(key, (String) value);
+                }
+            }
+            resultList.add(resultMap);
+        }
+
+        return resultList;
     }
 
     @GetMapping(value = "sensor", produces = "application/json; charset=UTF-8")
@@ -253,6 +296,31 @@ public class NodeController {
         for (Map<String, String> sensorMap : sensorList) {
             Map<String, String> resultMap = new HashMap<>();
             for (Map.Entry<String, String> entry : sensorMap.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue(); // 값의 형식을 Object로 변경
+
+                // 만약 값이 숫자라면 문자열로 변환하여 넣어줍니다.
+                if (isNumeric(value)) {
+                    resultMap.put(key, String.valueOf(value));
+                } else {
+                    resultMap.put(key, (String) value);
+                }
+            }
+            resultList.add(resultMap);
+        }
+
+        return resultList;
+    }
+
+    @GetMapping(value = "total", produces = "application/json; charset=UTF-8")
+    public List<Map<String, String>> TotalData() {
+        List<Map<String, String>> totalList = mapper.TotalData();
+        List<Map<String, String>> resultList = new ArrayList<>();
+
+        // 각 Map에 대해 숫자 값을 문자열로 변환하여 새로운 Map을 만들어 결과 리스트에 추가합니다.
+        for (Map<String, String> totalMap : totalList) {
+            Map<String, String> resultMap = new HashMap<>();
+            for (Map.Entry<String, String> entry : totalMap.entrySet()) {
                 String key = entry.getKey();
                 Object value = entry.getValue(); // 값의 형식을 Object로 변경
 
