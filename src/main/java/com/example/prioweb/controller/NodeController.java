@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,11 +25,29 @@ public class NodeController {
         this.mapper = mapper;
     }
 
-    @GetMapping(value = "nodeget", produces = "application/json; charset=UTF-8")
+    @GetMapping(value = "node", produces = "application/json; charset=UTF-8")
     public List<Map<String, String>> nodeGet() {
-        List<Map<String, String>> node = mapper.NodeGet();
+        List<Map<String, String>> nodeList = mapper.NodeGet();
+        List<Map<String, String>> resultList = new ArrayList<>();
 
-        return node;
+        // 각 Map에 대해 숫자 값을 문자열로 변환하여 새로운 Map을 만들어 결과 리스트에 추가합니다.
+        for (Map<String, String> nodeMap : nodeList) {
+            Map<String, String> resultMap = new HashMap<>();
+            for (Map.Entry<String, String> entry : nodeMap.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue(); // 값의 형식을 Object로 변경
+
+                // 만약 값이 숫자라면 문자열로 변환하여 넣어줍니다.
+                if (isNumeric(value)) {
+                    resultMap.put(key, String.valueOf(value));
+                } else {
+                    resultMap.put(key, (String) value);
+                }
+            }
+            resultList.add(resultMap);
+        }
+
+        return resultList;
     }
 
     @Autowired
@@ -215,5 +235,49 @@ public class NodeController {
 
         // 응답 반환
         return ResponseEntity.ok(resultBuilder.toString());
+    }
+
+    @GetMapping(value = "category", produces = "application/json; charset=UTF-8")
+    public List<Map<String, String>> categoryGet() {
+        List<Map<String, String>> category = mapper.CategoryGet();
+
+        return category;
+    }
+
+    @GetMapping(value = "sensor", produces = "application/json; charset=UTF-8")
+    public List<Map<String, String>> sensorGet() {
+        List<Map<String, String>> sensorList = mapper.SensorGet();
+        List<Map<String, String>> resultList = new ArrayList<>();
+
+        // 각 Map에 대해 숫자 값을 문자열로 변환하여 새로운 Map을 만들어 결과 리스트에 추가합니다.
+        for (Map<String, String> sensorMap : sensorList) {
+            Map<String, String> resultMap = new HashMap<>();
+            for (Map.Entry<String, String> entry : sensorMap.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue(); // 값의 형식을 Object로 변경
+
+                // 만약 값이 숫자라면 문자열로 변환하여 넣어줍니다.
+                if (isNumeric(value)) {
+                    resultMap.put(key, String.valueOf(value));
+                } else {
+                    resultMap.put(key, (String) value);
+                }
+            }
+            resultList.add(resultMap);
+        }
+
+        return resultList;
+    }
+
+    // 숫자인지 여부를 확인하는 메서드를 수정하여 Object 타입을 처리합니다.
+    private boolean isNumeric(Object obj) {
+        if (obj instanceof String) {
+            return ((String) obj).matches("-?\\d+(\\.\\d+)?");
+        } else if (obj instanceof Integer || obj instanceof Long || obj instanceof Float || obj instanceof Double
+                || obj instanceof Short || obj instanceof Byte) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

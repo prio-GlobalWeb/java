@@ -11,4 +11,18 @@
         <!-- company_id = 7 와이즈컨 테스트 회사 -->
         select id, setup_location, product_id from node where company_id="7"
     </select>
+
+    <select id="CategoryGet">
+        select node.id, product.category from node join product on node.product_id = product.id
+    </select>
+
+    <select id="SensorGet">
+        select node.id, code.id, code.name, code.short_name, slot.slot_number from node
+        join slot on node.id = slot.node_id
+        join slot_default on node.product_id = slot_default.product_id
+        and slot.sensor_code = slot_default.sensor_code and slot.slot_number = slot_default.slot_number
+        join code on slot_default.sensor_code = code.id
+        order by node.id asc, slot.slot_number asc
+    </select>
+
 </mapper>

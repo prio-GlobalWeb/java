@@ -10,4 +10,8 @@ public interface NodeMapper {
     List<Integer> NodeCheck();
 
     List<Map<String, String>> NodeGet();
+
+    List<Map<String, String>> CategoryGet();
+
+    List<Map<String, String>> SensorGet();
 }
